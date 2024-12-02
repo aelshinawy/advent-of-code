@@ -22,12 +22,12 @@ export const content = {
   day1: {
     link: "https://adventofcode.com/2024/day/1",
     part1: {
-        name: "Part 1",
+        name: "part1",
         description: "Day 1, Part 1 description",
         code: day1part1,
     },
     part2: {
-        name: "Part 2",
+        name: "part2",
         description: "Day 1, Part 2 description",
         code: day1part2,
     },
@@ -45,7 +45,7 @@ export const parseContentToData = (content: Content): TreeNodeData[] => {
         label: '2024',
         children: [
           {
-            value: '',
+            value: dayKey,
             label: dayLabel,
             children: [
               { value: day.part1.name, label: 'Part 1' },

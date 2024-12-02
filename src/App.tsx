@@ -3,16 +3,15 @@ import {
   Burger,
   Group,
   MantineProvider,
-  Tree,
-  useTree,
+  useTree
 } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { useDisclosure } from "@mantine/hooks";
-import { IconChevronDown } from "@tabler/icons-react";
-import Solver, { ProblemSolver } from "./Solver";
-import { theme } from "./theme";
 import { useEffect, useState } from "react";
 import { content, parseContentToData } from "./2024";
+import Solver, { ProblemSolver } from "./Solver";
+import { theme } from "./theme";
+import TreeComponent from "./Tree";
 
 const data = parseContentToData(content);
 
@@ -29,8 +28,8 @@ export default function App() {
   useEffect(() => {
     let func: ProblemSolver;
     const loadSolver = async () => {
-      const imported = await import("./2024/day1/part2");
-      func = imported.day1part2;
+      const imported = await import(`./2024/day2/part2`);
+      func = imported.day2part2;
 
       setSelectedSolver(() => func);
     };
@@ -66,25 +65,7 @@ export default function App() {
           </Group>
         </AppShell.Header>
         <AppShell.Navbar p="md">
-          <Tree
-            tree={tree}
-            data={data}
-            levelOffset={30}
-            renderNode={({ node, expanded, hasChildren, elementProps }) => (
-              <Group key={node.value} gap={5} {...elementProps}>
-                {hasChildren && (
-                  <IconChevronDown
-                    size={18}
-                    style={{
-                      transform: expanded ? "rotate(0deg)" : "rotate(-90deg)",
-                    }}
-                  />
-                )}
-
-                <div>{node.label}</div>
-              </Group>
-            )}
-          />
+          <TreeComponent tree={tree} data={data} />
         </AppShell.Navbar>
         <AppShell.Main>
           {selectedSolver && <Solver algorithm={selectedSolver} />}
