@@ -1,6 +1,6 @@
 import { filter, map, pipe, reduce } from "rxjs";
-import { ProblemSolver } from "../../Solver";
-import { binaryInsert } from "../../utils";
+import { ProblemSolver } from "../../../Solver";
+import { binaryInsert } from "../../../utils";
 
 export const day1part1: ProblemSolver = pipe(
     map((line:string) => line.trim().split(/\s+/).map(Number)),
@@ -15,3 +15,4 @@ export const day1part1: ProblemSolver = pipe(
     }),
 );
   
+export default day1part1;

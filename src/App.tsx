@@ -3,17 +3,17 @@ import {
   Burger,
   Group,
   MantineProvider,
-  useTree
+  useTree,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { useDisclosure } from "@mantine/hooks";
-import { useEffect, useState } from "react";
-import { content, parseContentToData } from "./2024";
-import Solver, { ProblemSolver } from "./Solver";
+import { useAtomValue } from "jotai";
+import { Route, Switch } from "wouter";
+import data from "./data";
+import Solver from "./Solver";
+import { solverAtom } from "./state";
 import { theme } from "./theme";
 import TreeComponent from "./Tree";
-
-const data = parseContentToData(content);
 
 export default function App() {
   const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
@@ -21,20 +21,7 @@ export default function App() {
 
   const tree = useTree();
 
-  const [selectedSolver, setSelectedSolver] = useState<ProblemSolver | null>(
-    null
-  );
-
-  useEffect(() => {
-    let func: ProblemSolver;
-    const loadSolver = async () => {
-      const imported = await import(`./2024/day2/part2`);
-      func = imported.day2part2;
-
-      setSelectedSolver(() => func);
-    };
-    loadSolver();
-  }, []);
+  const solvingFunc = useAtomValue(solverAtom);
 
   return (
     <MantineProvider theme={theme}>
@@ -68,7 +55,12 @@ export default function App() {
           <TreeComponent tree={tree} data={data} />
         </AppShell.Navbar>
         <AppShell.Main>
-          {selectedSolver && <Solver algorithm={selectedSolver} />}
+          <Switch>
+            <Route path="/solver/:year/:day/:part">
+              {solvingFunc.state === 'hasData' && solvingFunc.data && <Solver algorithm={solvingFunc.data} />}
+            </Route>
+            <Route>404: No such page!</Route>
+          </Switch>
         </AppShell.Main>
       </AppShell>
     </MantineProvider>

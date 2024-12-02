@@ -1,26 +1,25 @@
 import {
-    Group,
-    RenderTreeNodePayload,
-    Space,
-    Tree,
-    TreeNodeData,
-    UseTreeReturnType
+  Group,
+  RenderTreeNodePayload,
+  Space,
+  Tree,
+  TreeNodeData,
+  UseTreeReturnType,
 } from "@mantine/core";
 import { IconCode, IconFolder, IconFolderOpen } from "@tabler/icons-react";
 
+import { useAtom } from "jotai";
+import { useLocation } from "wouter";
+import { TreeData } from "./data/2024";
+import { solverPathAtom } from "./state";
 import classes from "./Tree.module.css";
 
 interface FileIconProps {
-  name: string;
   isFolder: boolean;
   expanded: boolean;
 }
 
-function FileIcon({ name, isFolder, expanded }: FileIconProps) {
-  if (name.startsWith("part")) {
-    return <IconCode size={14} />;
-  }
-
+function FileIcon({ isFolder, expanded }: FileIconProps) {
   if (isFolder) {
     return expanded ? (
       <IconFolderOpen
@@ -35,6 +34,8 @@ function FileIcon({ name, isFolder, expanded }: FileIconProps) {
         stroke={2.5}
       />
     );
+  } else {
+    return <IconCode size={14} />;
   }
 
   return null;
@@ -45,12 +46,24 @@ function Leaf({
   expanded,
   hasChildren,
   elementProps,
-}: RenderTreeNodePayload) {
+  setSolver,
+}: RenderTreeNodePayload & { setSolver: (solver: string) => void }) {
+  const [, setLocation] = useLocation();
+
+  const handleClick = (node: TreeData) => {
+    if (!hasChildren) {
+      if (!node.data) return;
+      setLocation(`/solver/${node.data.path}`);
+      setSolver(`${node.data.path}`);
+    }
+  };
   return (
-    <Group key={node.value} gap={5} {...elementProps}>
-      <Space w="sm" />
-      <FileIcon name={node.value} isFolder={hasChildren} expanded={expanded} />
-      <span>{node.label}</span>
+    <Group key={(node as TreeData).key} gap={5} {...elementProps}>
+      <Group onClick={() => handleClick(node as TreeData)}>
+        <Space w="sm" />
+        <FileIcon isFolder={hasChildren} expanded={expanded} />
+        <span>{node.label}</span>
+      </Group>
     </Group>
   );
 }
@@ -62,14 +75,16 @@ export default function TreeComponent({
   tree: UseTreeReturnType;
   data: TreeNodeData[];
 }) {
+  const [, setSelectedSolver] = useAtom(solverPathAtom);
   return (
     <Tree
       tree={tree}
       classNames={classes}
-      selectOnClick
       clearSelectionOnOutsideClick
       data={data}
-      renderNode={(payload) => <Leaf {...payload} />}
+      renderNode={(payload) => (
+        <Leaf {...payload} setSolver={setSelectedSolver} />
+      )}
     />
   );
 }
