@@ -1,6 +1,7 @@
 import { filter, map, pipe, reduce } from "rxjs";
 import { ProblemSolver } from "../../../Solver";
-import { binaryInsert } from "../../../utils";
+import { binaryInsert } from "./utils";
+
 
   
 export const day1part2: ProblemSolver = pipe(

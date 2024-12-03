@@ -83,6 +83,35 @@ export const data2024 = [
             }
           }
         ]
+      },
+      {
+        key: `2024d3`,
+        label:`Day 3`,
+        value:`2024d3`,
+        data: {
+          link: `https://adventofcode.com/2024/day/2`,
+          example: `7 6 4 2 1\n1 2 7 8 9\n9 7 6 2 1\n1 3 2 4 5\n8 6 4 4 1\n1 3 6 7 9`,
+        },
+        children: [
+          {
+            key: `2024d3p1`,
+            label: `Part 1`,
+            value: `2024d3p1`,
+            data: {
+              description: "Day 3, Part 1 description",
+              path: `2024/day3/part1`,
+            }
+          },
+          {
+            key: `2024d2p2`,
+            label: `Part 2`,
+            value: `2024d2p2`,
+            data: {
+              description: "Day 3, Part 2 description",
+              path:`2024/day3/part2`,
+            }
+          }
+        ]
       }
     ]
   }
