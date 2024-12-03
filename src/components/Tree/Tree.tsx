@@ -10,8 +10,8 @@ import { IconCode, IconFolder, IconFolderOpen } from "@tabler/icons-react";
 
 import { useAtom } from "jotai";
 import { useLocation } from "wouter";
-import { TreeData } from "./data/2024";
-import { solverPathAtom } from "./state";
+import { TreeData } from "../../solutions/2024";
+import { solverPathAtom } from "../../state";
 import classes from "./Tree.module.css";
 
 interface FileIconProps {
@@ -58,9 +58,9 @@ function Leaf({
     }
   };
   return (
-    <Group key={(node as TreeData).key} gap={5} {...elementProps}>
+    <Group key={(node as TreeData).key} gap={3} {...elementProps}>
       <Group onClick={() => handleClick(node as TreeData)}>
-        <Space w="sm" />
+        <Space w={0} />
         <FileIcon isFolder={hasChildren} expanded={expanded} />
         <span>{node.label}</span>
       </Group>

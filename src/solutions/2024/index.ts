@@ -1,5 +1,5 @@
 import { TreeNodeData } from "@mantine/core";
-import { ProblemSolver } from "../../Solver";
+import { ProblemSolver } from "../../components/Solver";
 
 
 export type Part = {
@@ -103,9 +103,9 @@ export const data2024 = [
             }
           },
           {
-            key: `2024d2p2`,
+            key: `2024d3p2`,
             label: `Part 2`,
-            value: `2024d2p2`,
+            value: `2024d3p2`,
             data: {
               description: "Day 3, Part 2 description",
               path:`2024/day3/part2`,

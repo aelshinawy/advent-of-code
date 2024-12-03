@@ -4,7 +4,7 @@
   }
   
 .label {
-    padding-block: 4px;
+    padding-block: 8px;
 
     &[data-hovered] {
         @mixin where-light {

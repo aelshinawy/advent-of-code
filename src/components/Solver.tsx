@@ -1,7 +1,8 @@
-import { Button, Text, Textarea, Title } from "@mantine/core";
-import { useEffect, useMemo, useState } from "react";
-import { from, Observable, Subject, switchMap, UnaryFunction } from "rxjs";
-import { linesToArray } from "./utils";
+import { Button, Textarea } from '@mantine/core';
+import { useAtom } from 'jotai';
+import { useEffect, useMemo, useState } from 'react';
+import { Observable, of, Subject, switchMap, UnaryFunction } from 'rxjs';
+import { resultAtom } from '../state';
 
 const buttonClick$ = new Subject<void>();
 const userInput$ = new Subject<string>();
@@ -12,15 +13,12 @@ export type ProblemSolver = UnaryFunction<
 >;
 
 export default function Solver({ algorithm }: { algorithm: ProblemSolver }) {
-  const [input, setInput] = useState("");
-  const [result, setResult] = useState("");
+  const [input, setInput] = useState('');
+  const [, setAnswer] = useAtom<string>(resultAtom)
 
   const solver$ = useMemo(
-    () =>
-      userInput$.pipe(
-        switchMap((userinput) => from(linesToArray(userinput)).pipe(algorithm))
-      ),
-    [algorithm]
+    () => userInput$.pipe(switchMap((input) => algorithm(of(input)))),
+    [algorithm],
   );
 
   useEffect(() => {
@@ -29,18 +27,18 @@ export default function Solver({ algorithm }: { algorithm: ProblemSolver }) {
     });
 
     const result = solver$.subscribe((input) => {
-      setResult(input.toString());
+      setAnswer(input.toString());
     });
     return () => {
       buttonSub.unsubscribe();
       result.unsubscribe();
     };
-  }, [algorithm, input, solver$]);
+  }, [algorithm, input, setAnswer, solver$]);
 
   return (
     <div>
       <Textarea
-        style={{ marginBottom: "10px" }}
+        style={{ marginBottom: '10px' }}
         autosize
         maxRows={10}
         label="Puzzle Input"
@@ -57,10 +55,6 @@ export default function Solver({ algorithm }: { algorithm: ProblemSolver }) {
       >
         Solve
       </Button>
-      <Text>Answer: </Text>
-      <Title order={2} c="teal.4">
-        {result}
-      </Title>
     </div>
   );
 }
